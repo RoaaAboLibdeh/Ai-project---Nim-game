@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Matchstick Subtraction Game</title>
+
+    <style>
+        .div2 {
+            text-align: center;
+        }
+
+        h2 {
+            font-family: ' Agbalumo ', cursive;
+            text-shadow: -1px 0 brown, 0 2px brown, 1px 0 brown, 0 -1px brown;
+            color: white;
+            font-size: 20px;
+        }
+
+        iWin {
+            font-family: ' Agbalumo ', cursive;
+            text-shadow: -1px 0 green, 0 2px green, 1px 0 green, 0 -1px green;
+            color: white;
+            font-size: 20px;
+        }
+
+
+        .parag1 {
+            font-family: ' Edu TAS Beginner ', cursive;
+            text-shadow: 1px 0 brown, 0 1px brown, 1px 0 brown, 0 1px brown;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f1f1ee;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            background-image: repeating-radial-gradient( #f8f1f1ee 87%, #3fa7b4 90%);
+            background-size: 50px 50px;
+        }
+
+        #matchstickContainer {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .stick {
+            width: 5px;
+            height: 90px;
+            background-color: gold;
+            position: relative;
+            margin-right: 20px; /* Adjust margin as needed */
+        }
+
+        .head {
+            width: 20px;
+            height: 20px;
+            background-color: firebrick;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: -7.5px;
+        }
+
+        #message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: white;
+        }
+
+        button {
+            padding: 1.3em 3em;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 500;
+            color: dimgrey;
+            background-color: #fff;
+            border: none;
+            border-radius: 45px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease 0s;
+            cursor: pointer;
+            outline: none;
+        }
+
+        button:hover {
+            background-color: brown;
+            box-shadow: 0px 15px 20px brown;
+            color: #fff;
+            transform: translateY(-7px);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2> Here are the sticks you entered:</h2> <br>
+    <div id="matchstickContainer"></div>
+    <h2 id="message">Your Turn</h2><br>
+    <div id="buttons">
+        <button class="subtraction-button" onclick="subtract(1)">-1</button>
+        <button class="subtraction-button" onclick="subtract(2)">-2</button>
+        <button class="subtraction-button" onclick="subtract(3)">-3</button>
+        <br><br>
+        <a href="askUSER.html">
+            <button>Back</button>
+        </a>
+    </div>
+</div>
+
+<script>
+    // Retrieve the user input from localStorage
+    const sticks = localStorage.getItem("stickNumber");
+    let total = sticks;
+    let winner = null; // Flag to track the winner
+    let flagwin = 0;
+
+    // Draw matchsticks on the page based on the value of sticks
+    const matchstickContainer = document.getElementById('matchstickContainer');
+    for (let i = 0; i < sticks; i++) {
+        const stick = document.createElement('div');
+        stick.classList.add('stick');
+
+        const head = document.createElement('div');
+        head.classList.add('head');
+
+        stick.appendChild(head);
+        matchstickContainer.appendChild(stick);
+    }
+
+    function subtract(amount) {
+        if (total > 0 && winner === null) {
+            total -= amount;
+
+            updateMessage();
+            flagwin = 0;
+            // Check for win after user's move
+            checkWin();
+
+            // If the game is not won, switch to the computer's turn
+            if (total > 0 && winner === null) {
+                switchPlayer();
+            }
+        }
+    }
+
+    function updateMessage() {
+        document.getElementById('message').textContent = `Your Turn`;
+        updateMatchsticks();
+    }
+
+    function switchPlayer() {
+        // Simulate PC's turn using the Alpha-Beta algorithm
+        if (total > 0 && winner === null) {
+            const pcMove = getBestMove(total);
+            total -= pcMove;
+            flagwin = 1;
+            updateMessage();
+            checkWin();
+        }
+    }
+
+    function checkWin() {
+        if (total <= 0) {
+            // Game over
+            const messageElement = document.getElementById('message');
+            if (flagwin === 0) {
+                messageElement.innerHTML = `<iWin>Congratulations !! You Won !!</iWin>`;
+                winner = 'user';
+            } else {
+                messageElement.innerHTML = `Game Over, PC Won !`;
+                winner = 'pc';
+            }
+            disableButtons();
+        }
+    }
+
+    function disableButtons() {
+        const buttons = document.querySelectorAll('.subtraction-button');
+        buttons.forEach(button => {
+            button.style.display = 'none';
+        });
+    }
+
+    function updateMatchsticks() {
+        // Remove matchsticks from the display
+        const matchstickContainer = document.getElementById('matchstickContainer');
+        matchstickContainer.innerHTML = '';
+
+        // Draw remaining matchsticks
+        for (let i = 0; i < total; i++) {
+            const stick = document.createElement('div');
+            stick.classList.add('stick');
+
+            const head = document.createElement('div');
+            head.classList.add('head');
+
+            stick.appendChild(head);
+            matchstickContainer.appendChild(stick);
+        }
+    }
+
+    // Alpha-Beta Algorithm
+    function getBestMove(totalSticks) {
+        let bestMove = -1;
+        let bestValue = -Infinity;
+
+        for (let i = 1; i <= 3; i++) {
+            if (totalSticks - i >= 0) {
+                const value = alphaBetaSearch(totalSticks - i, 10, -Infinity, Infinity, false);
+                if (value > bestValue) {
+                    bestValue = value;
+                    bestMove = i;
+                }
+            }
+        }
+
+        return bestMove;
+    }
+
+    function alphaBetaSearch(totalSticks, depth, alpha, beta, maximizingPlayer) {
+        if (depth === 0 || totalSticks === 0) {
+            return evaluationFunction(totalSticks, maximizingPlayer ? 'player' : 'pc');
+        }
+
+        if (maximizingPlayer) {
+            let value = -Infinity;
+
+            for (let i = 1; i <= 3; i++) {
+                if (totalSticks - i >= 0) {
+                    value = Math.max(value, alphaBetaSearch(totalSticks - i, depth - 1, alpha, beta, false));
+                    alpha = Math.max(alpha, value);
+
+                    if (beta <= alpha) {
+                        break; //  cutoffb
+                    }
+                }
+            }
+
+            return value;
+        } else {
+            let value = Infinity;
+
+            for (let i = 1; i <= 3; i++) {
+                if (totalSticks - i >= 0) {
+                    value = Math.min(value, alphaBetaSearch(totalSticks - i, depth - 1, alpha, beta, true));
+                    beta = Math.min(beta, value);
+
+                    if (beta <= alpha) {
+                        break; //  cutoffa
+                    }
+                }
+            }
+
+            return value;
+        }
+    }
+
+    function evaluationFunction(totalSticks, currentPlayer) {
+        if (totalSticks === 0) {
+            // If there are no sticks left, evaluate based on the current player
+            return currentPlayer === 'player' ? -1 : 1;
+        } else {
+            // If there are sticks left, the game is ongoing, return 0
+            return 0;
+        }
+    }
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>THE GAME OF NIM</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family= Agbalumo">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family= Edu TAS Beginner">
+
+  <link rel="stylesheet" type="text/css" href="main.css">
+
+  <style>
+    /* div2 contain h2 & parag & strat button */
+    .div2 {
+      text-align: center;
+      text-shadow: -1px 0 firebrick, 0 2px firebrick, 1px 0 brown, 0 -1px brown;
+    }
+    /*  game name  */
+    h2{
+      font-family: ' Agbalumo ', cursive;
+    }
+    h1{
+      font-family: ' Agbalumo ', cursive;
+    }
+    /*  paragraph of description game */
+    .parag1{
+      font-family: ' Edu TAS Beginner ', cursive;
+      text-shadow: -1px 0 firebrick, 0 2px firebrick, 1px 0 brown, 0 -1px brown;
+    }
+    .radio-input-wrapper{
+      text-align: center;
+      font-family: ' Edu TAS Beginner ', cursive;
+      text-shadow: -1px 0 firebrick, 0 2px firebrick, 1px 0 brown, 0 -1px brown;
+    }
+
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      /* Add your background pattern here */
+      background-image: repeating-radial-gradient(#f8f1f1ee 87%, #3fa7b4 90%);
+      background-size: 50px 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 80px;
+
+    }
+
+
+
+    /* Container for the list with a border */
+    .list-container {
+      border: 2px solid #e74c3c;/* Set the border color and width */
+      border-radius: 50px; /* Set border radius for rounded corners */
+      padding: 30px; /* Add some padding for better appearance */
+      width: 500px; /* Set the width of the container */
+    }
+
+    /* List styles */
+    .label {
+      display: flex;
+      align-items: center;
+      border-radius: 100px;
+      padding: 14px 16px;
+      margin: 5px 0;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .label:hover,
+    .label:focus-within,
+    .label:active {
+      background: hsla(0, 59%, 35%, 0.14);
+    }
+
+    .radio-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      z-index: -1;
+    }
+
+    .radio-design {
+      width: 22px;
+      height: 22px;
+      border-radius: 100px;
+      background: linear-gradient(to right bottom, hsl(154, 97%, 62%), hsl(225, 97%, 62%));
+      position: relative;
+    }
+
+    .radio-design::before {
+      content: '';
+      display: inline-block;
+      width: inherit;
+      height: inherit;
+      border-radius: inherit;
+      background: hsl(0, 55%, 51%);
+      transform: scale(1.1);
+      transition: .3s;
+    }
+
+    .radio-input:checked+.radio-design::before {
+      transform: scale(0);
+    }
+
+    .label-text {
+      color: hsl(0, 9%, 96%);
+      margin-left: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: 18px;
+      font-weight: 900;
+      transition: .3s;
+    }
+
+    .radio-input:checked~.label-text {
+      color: hsl(0, 100%, 31%);
+    }
+
+    .button {
+      width: 150px;
+      padding: 0;
+      border: none;
+      transform: rotate(5deg);
+      transform-origin: center;
+      font-family: "Gochi Hand", cursive;
+      text-decoration: none;
+      font-size: 15px;
+      padding-bottom: 3px;
+      border-radius: 5px;
+      box-shadow: 0 2px 0 #494a4b;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background-color:  #e74c3c
+    }
+
+    .button span {
+      background: #f1f5f8;
+      display: block;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      border: 2px solid #494a4b;
+    }
+
+    .button:active {
+      transform: translateY(5px);
+      padding-bottom: 0px;
+      outline: 0;
+    }
+    /*End about button */
+
+
+
+  </style>
+</head>
+
+<body>
+
+
+
+
+<div class="container" >
+
+
+
+  <div class="div2">
+    <h2 style="color: white;  font-size:50px;"> The GAME OF
+      <span class="span1" style="color: white; font-size:80px;"> NIM </span></h2>
+
+
+    <br> <br>
+    <center>
+      <!-- Container for the list -->
+      <div class="list-container">
+        <!-- List -->
+        <h1  style="color: white; font-size: 40px;">Welcome to play </h1>
+
+        <h2 style="color: white; font-size: 25px;">  Please select the version : </h2>
+        <div class="radio-input-wrapper">
+          <label class="label">
+            <input value="value-2" name="value-radio" id="value-2" class="radio-input" type="radio">
+            <div class="radio-design"></div>
+            <a href="askUSER.html">
+            <div class="label-text">version1</div>
+            </a>
+          </label>
+          <label class="label">
+            <input value="value-3" name="value-radio" id="value-3" class="radio-input" type="radio">
+            <div class="radio-design"></div>
+            <a href="ooooo.html">
+            <div class="label-text">version2</div>
+            </a>
+          </label>
+
+          <label class="label">
+
+            <input value="value-3" name="value-radio" id="value-4" class="radio-input" type="radio">
+            <div class="radio-design"></div>
+            <a href="about.html">
+              <div class="label-text">About</div></a>
+          </label>
+
+        </div>
+        <!-- End List -->
+        <br>
+        <!--  about  button
+        <a></a>
+        <button class="button">
+          <span> about !</span>
+        </button>
+        end  about button  -->
+
+
+
+
+
+      </div>    <!--end  class container -->
+
+
+
+
+</center>
+  </div>
+</div>
+
+
+</body>
+
+</html>

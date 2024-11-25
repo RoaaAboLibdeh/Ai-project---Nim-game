@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family= Agbalumo">
+  <style>
+
+
+
+    .container {
+
+
+      width: 100vw;
+      height: 100vh;
+      /* Add your background pattern here */
+      background-image: repeating-radial-gradient(#f8f1f1ee 87%, #3fa7b4 90%);
+      background-size: 50px 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 80px;
+
+    }
+
+
+    .button {
+      width: 150px;
+      padding: 0;
+      border: none;
+      transform: rotate(5deg);
+      transform-origin: center;
+      font-family: "Gochi Hand", cursive;
+      text-decoration: none;
+      font-size: 15px;
+      padding-bottom: 3px;
+      border-radius: 5px;
+      box-shadow: 0 2px 0 #494a4b;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background-color:  #e74c3c
+    }
+
+    .button span {
+      background: #f1f5f8;
+      display: block;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      border: 2px solid #494a4b;
+    }
+
+    .button:active {
+      transform: translateY(5px);
+      padding-bottom: 0px;
+      outline: 0;
+    }
+    /*End back button */
+
+
+    p {
+      font-family: ' Agbalumo ', cursive;
+      text-shadow: -1px 0 brown, 0 2px brown, 1px 0 brown, 0 -1px brown;
+      color: white;
+      font-size: 20px;
+    }
+
+    h2 {
+      font-family: ' Agbalumo ', cursive;
+      text-shadow: -1px 0 brown, 0 2px brown, 1px 0 brown, 0 -1px brown;
+      color: white;
+      font-size: 20px;
+    }
+    /game/
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .stick-container {
+      display: flex;
+      margin: 10px;
+    }
+
+    .stick {
+      display: flex;
+      flex-direction: column;
+      margin: 0 10px;
+    }
+
+    .circle {
+      width: 30px;
+      height: 30px;
+      margin: 5px 0;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    /* Update background colors for each stick */
+    .stick:nth-child(1) .circle { background-color: #4f5254; }
+    .stick:nth-child(2) .circle { background-color: #a6443b; }
+    .stick:nth-child(3) .circle { background-color: #a6443b; }
+    .stick:nth-child(4) .circle { background-color: #a6443b; }
+    .stick:nth-child(5) .circle { background-color: #4f5254; }
+
+    p {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+
+
+  </style>
+</head>
+
+<body>
+
+<div class="container" >
+
+
+  <!-- div var1 -->
+  <div class="var1">
+    <h2 style="color: white;font-size:30px ;">welcome to the version1</h2>
+
+    <!-- End div var1 -->
+
+
+
+    <div id="game-board" class="stick-container"></div>
+    <p id="current-player">Current Player: Player</p>
+    <script>
+
+      // Initialize the game board
+      const initialSticks = 5;
+      let sticksLeft = initialSticks; //var
+      let currentPlayer = 'player';
+
+      function createStick() {
+        const stick = document.createElement('div');
+        stick.className = 'stick';
+        for (let i = 0; i < 4; i++) {
+          const circle = document.createElement('div');
+          circle.className = 'circle';
+          circle.addEventListener('click', () => handleMove(circle));
+          stick.appendChild(circle);
+        }
+        return stick;
+      }
+
+      function handleMove(circle) {
+        if (currentPlayer === 'player') {
+          removeCircles(circle);
+        }
+
+        // Check if player won
+        if (document.querySelectorAll('.circle').length === 0) {
+          alert('Sorry, you lost! Better luck next time.');
+          resetGame();
+        }
+
+        else {
+          currentPlayer = currentPlayer === 'player' ? 'computer' : 'player';
+          updateCurrentPlayer();
+          if (currentPlayer === 'computer') {
+            setTimeout(computerMove, 1000);
+          }
+        }
+      }
+
+      function removeCircles(clickedCircle) {
+        const circles = clickedCircle.parentNode.children;
+        const clickedIndex = Array.from(circles).indexOf(clickedCircle);
+
+        if (circles[clickedIndex + 1]) {
+          // If there is a circle below, remove it along with the clicked one
+          circles[clickedIndex + 1].parentNode.removeChild(circles[clickedIndex + 1]);
+        }
+
+
+        circles[clickedIndex].parentNode.removeChild(circles[clickedIndex]);
+      }
+
+
+      function computerMove() {
+        const availableCircles = document.querySelectorAll('.circle');
+
+        // Handle the case when there are only two circles left
+        if (availableCircles.length === 2) {
+          alert('Congratulations! You won!');
+          resetGame();
+        }
+
+        else {
+          const computerCirclesToRemove = getRandomRemoveCount();
+
+          for (let i = 0; i < computerCirclesToRemove; i++) {
+            if (availableCircles[i]) {
+              removeCircles(availableCircles[i]);
+            }
+          }// Check if computer won
+          if (document.querySelectorAll('.circle').length === 0) {
+            alert('Sorry, you lost! Better luck next time.');
+            resetGame();
+          } else {
+            currentPlayer = 'player';
+            updateCurrentPlayer();
+          }
+        }
+      }
+
+      function getRandomRemoveCount() {
+        // Returns a random number between 1 and 2
+        return Math.floor(Math.random() * 2) + 1;
+      }
+
+
+      function resetGame() {
+        sticksLeft = initialSticks;
+        currentPlayer = 'player';
+        updateGameBoard();
+        updateCurrentPlayer();
+      }
+
+      function updateGameBoard() {
+        const gameBoard = document.getElementById('game-board');
+        gameBoard.innerHTML = '';
+        for (let i = 0; i < sticksLeft; i++) {
+          gameBoard.appendChild(createStick());
+        }
+      }
+
+      function updateCurrentPlayer() {
+        const currentPlayerElement = document.getElementById('current-player');
+        currentPlayerElement.textContent = `Current Player: ${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)}`;
+      }
+
+      // Initial setup
+      updateGameBoard();
+      updateCurrentPlayer();
+    </script>
+
+    <!-- back button-->
+    <br> <br> <br> <br>
+    <button class="button">
+      <a href="tryinman.html">
+      <span>Back to list</span>
+      </a>
+    </button>
+
+    <!--  End back button-->
+
+
+
+
+  </div>    <!--end  class container -->
+</div>
+</body>
+</html>
